@@ -21,6 +21,7 @@ import socket
 import io
 import wave
 import numpy as np
+import requests
 
 # Class to check tts settings
 class InvalidSettingsError(Exception):
@@ -396,6 +397,18 @@ class TTSWrapper:
         """ Gets available speakers """
         speakers = [ s['speaker_name'] for s in self._get_speakers() ] 
         return speakers
+
+    def create_speaker_from_wav_url(self, speaker_name, wav_url):
+        """ Creates a speaker from a wav file at a given URL. """
+        # Download the file
+        wav_path = os.path.join(self.speaker_folder, f"{speaker_name}.wav")
+        with open(wav_path, 'wb') as wav_file:
+            wav_file.write(requests.get(wav_url).content)
+
+        # Add the speaker to the list
+        self.speakers.append(speaker_name)
+
+        return wav_path
 
     def get_local_ip(self):
       try:

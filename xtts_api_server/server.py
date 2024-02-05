@@ -140,6 +140,11 @@ class SynthesisFileRequest(BaseModel):
     language: str
     file_name_or_path: str  
 
+class AddSpeakerRequest(BaseModel):
+    speaker_name: str
+    wav_url: str
+
+
 @app.get("/speakers_list")
 def get_speakers():
     speakers = XTTS.get_speakers()
@@ -194,6 +199,15 @@ def set_speaker_folder(speaker_req: SpeakerFolderRequest):
     try:
         XTTS.set_speaker_folder(speaker_req.speaker_folder)
         return {"message": f"Speaker folder set to {speaker_req.speaker_folder}"}
+    except ValueError as e:
+        logger.error(e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/create_speaker")
+def add_speaker(speaker_req: AddSpeakerRequest):
+    try:
+        XTTS.create_speaker_from_wav_url(speaker_req.speaker_name, speaker_req.wav_url)
+        return {"message": f"Speaker {speaker_req.speaker_name} added"}
     except ValueError as e:
         logger.error(e)
         raise HTTPException(status_code=400, detail=str(e))
