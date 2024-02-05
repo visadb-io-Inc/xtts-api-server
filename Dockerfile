@@ -12,8 +12,8 @@ RUN apt-get update && \
 RUN python3 -m pip install --upgrade pip setuptools wheel ninja virtualenv
 
 # Copy the application source code to /app directory and change the workdir to /app
-# COPY . /app
-# WORKDIR /app
+COPY . /app
+WORKDIR /app
 
 # Install Python dependencies
 RUN pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
