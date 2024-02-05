@@ -6,7 +6,7 @@ services:
     env_file: .env
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "${HOST_PORT:-8020}:${CONTAINER_PORT:-8020}"
     volumes:
@@ -16,5 +16,4 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: ['0']
               capabilities: [gpu]

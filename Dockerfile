@@ -1,9 +1,6 @@
 # Use an official NVIDIA base image with CUDA support
 FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
 
-# Set label for the docker image description
-LABEL description="Docker image for xtts-api-server"
-
 # Install required packages (avoid cache to reduce image size)
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
@@ -21,7 +18,7 @@ RUN python3 -m pip install --upgrade pip setuptools wheel ninja virtualenv
 # Install Python dependencies
 RUN pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
 RUN pip install deepspeed
-RUN pip install xtts-api-server
+RUN pip install -r requirements.txt
 
 # Expose the container ports
 EXPOSE 8020
